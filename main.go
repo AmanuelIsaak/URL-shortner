@@ -22,6 +22,12 @@ func main() {
 		})
 	})
 
+	router.HandleFunc("GET /shorten", func(w http.ResponseWriter, r *http.Request) {
+		tmpl.ExecuteTemplate(w, "shorten.html", PageData{
+			Name: "YouTube!",
+		})
+	})
+
 	srv := http.Server{
 		Addr:    ":8080",
 		Handler: router,

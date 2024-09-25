@@ -1,12 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" class="h-screen" style="color-scheme: dark; text-align: center; font-family: Poppins, sans;">
+<html lang="en" class="h-screen" style="color-scheme: dark; text-align: center;">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Example Template</title>
   </head>
-  <body>
-    <!-- Here we have a templated value of .Name, passed in from Go -->
-    <h1>Hello {{ .Name }}</h1>
+  <body class="pt-32 sm:pt-40">
+    <main class="">
+      <h1 class="text-center text-4xl font-bold">URL Shortener</h1>
+      <div class="mt-8 flex flex-col items-center space-y-8 justify-center">
+        <div class="max-w-2xl p-2 w-full">
+          <form class="w-full" method="POST" action="/shorten">
+            <div class="flex items-center border-b border-teal-500 py-2">
+              <input class="appearance-none bg-transparent border-none w-full text-gray-300 text-xl mr-3 py-3 px-2 leading-tight focus:!outline-none" type="text" placeholder="Enter Link Here" name="url" aria-label="URL">
+              <button class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-lg border-4 text-white py-1 px-2 rounded" type="submit">
+                Shorten
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
   </body>
 </html>
