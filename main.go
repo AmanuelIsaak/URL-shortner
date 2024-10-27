@@ -9,7 +9,6 @@ import (
 )
 
 type PageData struct {
-	Name  string
 	Short string
 }
 
@@ -26,9 +25,7 @@ func main() {
 	router := http.NewServeMux()
 
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		err := tmpl.ExecuteTemplate(w, "index.html", PageData{
-			Name: "YouTube!",
-		})
+		err := tmpl.ExecuteTemplate(w, "index.html", PageData{})
 		if err != nil {
 			return
 		}
@@ -41,7 +38,6 @@ func main() {
 			urlMap[shortCode] = shortURL{OriginalURL: originalURL, ShortCode: shortCode}
 
 			err := tmpl.ExecuteTemplate(w, "shorten.html", PageData{
-				Name:  "YouTube!",
 				Short: "http://localhost:8080/r/" + shortCode,
 			})
 			if err != nil {
@@ -76,7 +72,7 @@ func main() {
 
 func generateShortCode() string {
 	const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	shortCode := make([]byte, 6)
+	shortCode := make([]byte, 7)
 	for i := range shortCode {
 		shortCode[i] = chars[rand.Intn(len(chars))]
 	}
