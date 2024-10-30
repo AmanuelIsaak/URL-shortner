@@ -41,7 +41,8 @@ func main() {
 			urlMap[shortCode] = shortURL{OriginalURL: originalURL, ShortCode: shortCode}
 
 			err := tmpl.ExecuteTemplate(w, "shorten.html", PageData{
-				Short: "https://" + domainName + "/r/" + shortCode,
+
+				Short: "http://localhost:8080/r/" + shortCode,
 			})
 			if err != nil {
 				return
@@ -75,7 +76,7 @@ func main() {
 
 func generateShortCode() string {
 	const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	shortCode := make([]byte, 6)
+	shortCode := make([]byte, 7)
 	for i := range shortCode {
 		shortCode[i] = chars[rand.Intn(len(chars))]
 	}
