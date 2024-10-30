@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"math/rand"
 	"net/http"
+	"os"
 )
 
 type PageData struct {
@@ -16,6 +17,8 @@ type shortURL struct {
 	OriginalURL string `json:"original_url"`
 	ShortCode   string `json:"short_code"`
 }
+
+var domainName = os.Getenv("DOMAIN_NAME")
 
 var urlMap = make(map[string]shortURL)
 
@@ -38,6 +41,7 @@ func main() {
 			urlMap[shortCode] = shortURL{OriginalURL: originalURL, ShortCode: shortCode}
 
 			err := tmpl.ExecuteTemplate(w, "shorten.html", PageData{
+
 				Short: "http://localhost:8080/r/" + shortCode,
 			})
 			if err != nil {
