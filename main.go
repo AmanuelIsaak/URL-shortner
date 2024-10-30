@@ -6,10 +6,10 @@ import (
 	"html/template"
 	"math/rand"
 	"net/http"
+	"os"
 )
 
 type PageData struct {
-	Name  string
 	Short string
 }
 
@@ -17,6 +17,8 @@ type shortURL struct {
 	OriginalURL string `json:"original_url"`
 	ShortCode   string `json:"short_code"`
 }
+
+var domainName = os.Getenv("DOMAIN_NAME")
 
 var urlMap = make(map[string]shortURL)
 
@@ -26,9 +28,7 @@ func main() {
 	router := http.NewServeMux()
 
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		err := tmpl.ExecuteTemplate(w, "index.html", PageData{
-			Name: "YouTube!",
-		})
+		err := tmpl.ExecuteTemplate(w, "index.html", PageData{})
 		if err != nil {
 			return
 		}
@@ -41,8 +41,7 @@ func main() {
 			urlMap[shortCode] = shortURL{OriginalURL: originalURL, ShortCode: shortCode}
 
 			err := tmpl.ExecuteTemplate(w, "shorten.html", PageData{
-				Name:  "YouTube!",
-				Short: "http://localhost:8080/r/" + shortCode,
+				Short: "https://" + domainName + "/r/" + shortCode,
 			})
 			if err != nil {
 				return
