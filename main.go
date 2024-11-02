@@ -18,13 +18,16 @@ type shortURL struct {
 	ShortCode   string `json:"short_code"`
 }
 
-var domainName = os.Getenv("DOMAIN_NAME")
-
 var urlMap = make(map[string]shortURL)
 
 func main() {
-	tmpl := template.Must(template.New("").ParseGlob("./templates/*"))
+	port := os.Getenv("DOMAIN_NAME")
 
+	if port == "" {
+		port = "8080"
+	}
+
+	tmpl := template.Must(template.New("").ParseGlob("./templates/*"))
 	router := http.NewServeMux()
 
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +44,7 @@ func main() {
 			urlMap[shortCode] = shortURL{OriginalURL: originalURL, ShortCode: shortCode}
 
 			err := tmpl.ExecuteTemplate(w, "shorten.html", PageData{
-				Short: "https://" + domainName + "/r/" + shortCode,
+				Short: "http://localhost:8080/r/" + shortCode,
 			})
 			if err != nil {
 				return
@@ -61,21 +64,19 @@ func main() {
 	})
 
 	srv := http.Server{
-		Addr:    ":8080",
+		Addr:    ":" + port,
 		Handler: router,
 	}
 
 	fmt.Println("Starting website at localhost:8080")
-
-	err := srv.ListenAndServe()
-	if err != nil && !errors.Is(err, http.ErrServerClosed) {
+	if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		fmt.Println("An error occured:", err)
 	}
 }
 
 func generateShortCode() string {
 	const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	shortCode := make([]byte, 6)
+	shortCode := make([]byte, 7)
 	for i := range shortCode {
 		shortCode[i] = chars[rand.Intn(len(chars))]
 	}
