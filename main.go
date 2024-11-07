@@ -6,7 +6,6 @@ import (
 	"html/template"
 	"math/rand"
 	"net/http"
-	"os"
 )
 
 type PageData struct {
@@ -21,12 +20,6 @@ type shortURL struct {
 var urlMap = make(map[string]shortURL)
 
 func main() {
-	port := os.Getenv("DOMAIN_NAME")
-
-	if port == "" {
-		port = "http://localhost:8080"
-	}
-
 	tmpl := template.Must(template.New("").ParseGlob("./templates/*"))
 	router := http.NewServeMux()
 
@@ -44,7 +37,7 @@ func main() {
 			urlMap[shortCode] = shortURL{OriginalURL: originalURL, ShortCode: shortCode}
 
 			err := tmpl.ExecuteTemplate(w, "shorten.html", PageData{
-				Short: port + "/r/" + shortCode,
+				Short: "http:/localhost:8080/r/" + shortCode,
 			})
 			if err != nil {
 				return
@@ -64,7 +57,7 @@ func main() {
 	})
 
 	srv := http.Server{
-		Addr:    ":" + port,
+		Addr:    ":8080",
 		Handler: router,
 	}
 
