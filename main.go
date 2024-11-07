@@ -24,7 +24,7 @@ func main() {
 	port := os.Getenv("DOMAIN_NAME")
 
 	if port == "" {
-		port = "8080"
+		port = "http://localhost:8080"
 	}
 
 	tmpl := template.Must(template.New("").ParseGlob("./templates/*"))
@@ -44,7 +44,7 @@ func main() {
 			urlMap[shortCode] = shortURL{OriginalURL: originalURL, ShortCode: shortCode}
 
 			err := tmpl.ExecuteTemplate(w, "shorten.html", PageData{
-				Short: "http://localhost:8080/r/" + shortCode,
+				Short: port + "/r/" + shortCode,
 			})
 			if err != nil {
 				return
